@@ -1,5 +1,27 @@
 import pandas as pd
+from pandas._testing import assert_index_equal
 from pandas._testing import assert_series_equal
+
+
+def test_get_index_of_rows_with_no_access_to_public_transports(preprocessor):
+    input_df = pd.DataFrame({
+        'access': [
+            '成田線椎柴駅 車で6',
+            '四街道駅 徒歩22分',
+            'つくばエクスプレス 車1分|花野井神社 停歩6分以内',
+            'JR内房線五井駅より'
+        ]
+    })
+    expected = pd.Int64Index([0, 3])
+    output = (
+        preprocessor
+        ._get_index_of_rows_with_no_access_to_public_transports(
+            input_df,
+            'access'
+        )
+    )
+
+    assert_index_equal(output, expected)
 
 
 def test_price_str_to_float(preprocessor):
