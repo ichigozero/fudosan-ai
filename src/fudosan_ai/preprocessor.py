@@ -64,3 +64,9 @@ class Preprocessor:
             return -floor_number
         else:
             return floor_number
+
+    def _convert_to_binary(self, column_value):
+        if 'あり' in column_value:
+            return 1
+        else:
+            return 0

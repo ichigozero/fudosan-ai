@@ -130,3 +130,16 @@ def test_extract_floor_number(preprocessor):
     output = input_series.apply(preprocessor._extract_floor_number)
 
     assert_series_equal(output, expected)
+
+
+def test_convert_to_binary(preprocessor):
+    input_series = pd.Series([
+        'あり',
+        'あり 無料',
+        'なし',
+        '空きなし',
+    ])
+    expected = pd.Series([1, 1, 0, 0, ])
+    output = input_series.apply(preprocessor._convert_to_binary)
+
+    assert_series_equal(output, expected)
