@@ -62,3 +62,18 @@ def test_extract_city_of_chiba_address(preprocessor):
     )
 
     assert_series_equal(output, expected)
+
+
+def test_extract_minimum_access_time_to_public_transport(preprocessor):
+    input_series = pd.Series([
+        '四街道駅 徒歩22分',
+        '川間駅 徒歩9分|柏駅 徒歩268分',
+        '総武本線 徒歩67分|物井駅 徒歩51分|都賀駅 徒歩23分',
+        'つくばエクスプレス 車1分|花野井神社 停歩6分以内|総武本線 徒歩19分',
+    ])
+    expected = pd.Series([22, 9, 23, 6, ])
+    output = input_series.apply(
+        preprocessor._extract_minimum_access_time_to_public_transport
+    )
+
+    assert_series_equal(output, expected)

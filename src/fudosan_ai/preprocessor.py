@@ -30,3 +30,15 @@ class Preprocessor:
         city = re.search(regex, location).group(1)
 
         return city.replace(prefecture, '')
+
+    def _extract_minimum_access_time_to_public_transport(
+            self,
+            access_to_public_transports
+    ):
+        access_times = re.findall(
+            r'[徒歩|停歩]([0-9]+)分',
+            access_to_public_transports
+        )
+        access_times = list(map(int, access_times))
+
+        return min(access_times)
