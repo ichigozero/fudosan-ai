@@ -24,3 +24,9 @@ class Preprocessor:
                 return averaged_price * 10000
             else:
                 return averaged_price
+
+    def _extract_city_of_address(self, location, prefecture, city_title):
+        regex = r'(.*[{}])'.format(city_title)
+        city = re.search(regex, location).group(1)
+
+        return city.replace(prefecture, '')
