@@ -119,6 +119,17 @@ def test_extract_minimum_access_time_to_public_transport(preprocessor):
     assert_series_equal(output, expected)
 
 
+def test_extract_build_year(preprocessor):
+    input_series = pd.Series([
+        '築41年(1980年)',
+        '築27年(1994年04月)',
+    ])
+    expected = pd.Series([1980, 1994, ])
+    output = input_series.apply(preprocessor._extract_build_year)
+
+    assert_series_equal(output, expected)
+
+
 def test_extract_floor_number(preprocessor):
     input_series = pd.Series([
         '1階部分',
