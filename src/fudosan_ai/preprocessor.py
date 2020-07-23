@@ -49,3 +49,11 @@ class Preprocessor:
         access_times = list(map(int, access_times))
 
         return min(access_times)
+
+    def _extract_floor_number(self, floor):
+        floor_number = int(re.search(r'([1-9]+)階', floor).group(1))
+
+        if '地下' in floor:
+            return -floor_number
+        else:
+            return floor_number

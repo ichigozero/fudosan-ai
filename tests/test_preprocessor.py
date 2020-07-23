@@ -99,3 +99,16 @@ def test_extract_minimum_access_time_to_public_transport(preprocessor):
     )
 
     assert_series_equal(output, expected)
+
+
+def test_extract_floor_number(preprocessor):
+    input_series = pd.Series([
+        '1階部分',
+        '11階部分',
+        '地下1階部分',
+        '地下4階部分',
+    ])
+    expected = pd.Series([1, 11, -1, -4, ])
+    output = input_series.apply(preprocessor._extract_floor_number)
+
+    assert_series_equal(output, expected)
