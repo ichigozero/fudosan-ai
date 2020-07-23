@@ -24,6 +24,24 @@ def test_get_index_of_rows_with_no_access_to_public_transports(preprocessor):
     assert_index_equal(output, expected)
 
 
+def test_get_index_of_rows_with_no_floor_numbers(preprocessor):
+    input_df = pd.DataFrame({
+        'floor_number': [
+            '1階部分',
+            '-',
+            '',
+            '地下1階部分'
+        ]
+    })
+    expected = pd.Int64Index([1, 2])
+    output = preprocessor._get_index_of_rows_with_no_floor_numbers(
+        input_df,
+        'floor_number'
+    )
+
+    assert_index_equal(output, expected)
+
+
 def test_price_str_to_float(preprocessor):
     input_series = pd.Series([
         '0.72万円',
