@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas._testing import assert_frame_equal
 from pandas._testing import assert_index_equal
 from pandas._testing import assert_series_equal
 
@@ -141,6 +142,27 @@ def test_extract_floor_number(preprocessor):
     output = input_series.apply(preprocessor._extract_floor_number)
 
     assert_series_equal(output, expected)
+
+
+def test_convert_multi_categorical_variables_to_binaries(preprocessor):
+    input_series = pd.Series([
+        'a|b|c|c',
+        'c|d|',
+        'd',
+        None,
+    ])
+    expected = pd.DataFrame({
+        'col_a': [1, 0, 0, 0, ],
+        'col_b': [1, 0, 0, 0, ],
+        'col_c': [1, 1, 0, 0, ],
+        'col_d': [0, 1, 1, 0, ],
+    })
+    output = preprocessor._convert_multi_categorical_variables_to_binaries(
+        series=input_series,
+        prefix='col'
+    )
+
+    assert_frame_equal(output, expected)
 
 
 def test_convert_to_binary(preprocessor):

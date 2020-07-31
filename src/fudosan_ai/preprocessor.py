@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 
 
 class Preprocessor:
@@ -67,6 +68,25 @@ class Preprocessor:
             return -floor_number
         else:
             return floor_number
+
+    def _convert_multi_categorical_variables_to_binaries(
+        self,
+        series,
+        prefix,
+        delimiter='|'
+    ):
+        df_output = pd.DataFrame(series)
+        df_output.fillna('', inplace=True)
+        splitted_series = series.str.split(delimiter, expand=True)
+        unique_series = pd.unique(splitted_series.values.ravel('K'))
+
+        for item in sorted(filter(None, unique_series)):
+            column_name = '{}_{}'.format(prefix, item)
+            df_output[column_name] = 0
+            df_output.loc[series.str.contains(item), column_name] = 1
+
+        # Exclude first column from the output
+        return df_output.drop(df_output.columns[[0]], axis=1)
 
     def _convert_to_binary(self, column_value):
         if 'あり' in column_value:
