@@ -8,14 +8,14 @@ class Preprocessor:
             df,
             column_name
     ):
-        return df[~df[column_name].str.contains('徒歩|停歩')].index
+        return df[~df[column_name].str.contains('徒歩|停歩', na=False)].index
 
     def _get_index_of_rows_with_no_floor_numbers(
         self,
         df,
         column_name
     ):
-        return df[~df[column_name].str.contains('階')].index
+        return df[~df[column_name].str.contains('階', na=False)].index
 
     def _convert_price_str_to_float(self, price):
         if 'なし' in price:

@@ -10,10 +10,11 @@ def test_get_index_of_rows_with_no_access_to_public_transports(preprocessor):
             '成田線椎柴駅 車で6',
             '四街道駅 徒歩22分',
             'つくばエクスプレス 車1分|花野井神社 停歩6分以内',
-            'JR内房線五井駅より'
+            'JR内房線五井駅より',
+            None,
         ]
     })
-    expected = pd.Int64Index([0, 3])
+    expected = pd.Int64Index([0, 3, 4])
     output = (
         preprocessor
         ._get_index_of_rows_with_no_access_to_public_transports(
@@ -31,10 +32,11 @@ def test_get_index_of_rows_with_no_floor_numbers(preprocessor):
             '1階部分',
             '-',
             '',
-            '地下1階部分'
+            '地下1階部分',
+            None,
         ]
     })
-    expected = pd.Int64Index([1, 2])
+    expected = pd.Int64Index([1, 2, 4])
     output = preprocessor._get_index_of_rows_with_no_floor_numbers(
         input_df,
         'floor_number'
