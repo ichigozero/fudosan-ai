@@ -148,11 +148,11 @@ def test_extract_build_year(preprocessor):
 def test_extract_floor_number(preprocessor):
     input_series = pd.Series([
         '1階部分',
-        '11階部分',
+        '10階部分',
         '地下1階部分',
         '地下4階部分',
     ])
-    expected = pd.Series([1, 11, -1, -4, ])
+    expected = pd.Series([1, 10, -1, -4, ])
     output = input_series.apply(preprocessor._extract_floor_number)
 
     assert_series_equal(output, expected)

@@ -68,7 +68,7 @@ class Preprocessor:
         return int(re.search(r'\(([0-9]*)年.*\)', build_date).group(1))
 
     def _extract_floor_number(self, floor):
-        floor_number = int(re.search(r'([1-9]+)階', floor).group(1))
+        floor_number = int(re.search(r'([0-9]+)階', floor).group(1))
 
         if '地下' in floor:
             return -floor_number
