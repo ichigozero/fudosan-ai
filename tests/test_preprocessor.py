@@ -49,7 +49,7 @@ def test_price_str_to_float(preprocessor):
     input_series = pd.Series([
         '0.72万円',
         '1.2万円※',
-        '1.5〜1.7万円',
+        '1.5～1.7万円',
         '3,000円',
         'なし',
         'なし※'

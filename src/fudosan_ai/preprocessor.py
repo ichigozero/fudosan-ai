@@ -32,7 +32,7 @@ class Preprocessor:
 
             # When property price is a price range
             # take the average of the prices as the new price
-            prices = list(map(float, symbolless_price.split('〜')))
+            prices = list(map(float, symbolless_price.split('～')))
             averaged_price = sum(prices) / len(prices)
 
             if has_ten_thousands_counter:
