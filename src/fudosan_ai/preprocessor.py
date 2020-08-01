@@ -58,6 +58,12 @@ class Preprocessor:
 
         return min(access_times)
 
+    def _extract_room_layout(self, room_layout):
+        try:
+            return re.search(r'(.*) \(.*\)', room_layout).group(1)
+        except AttributeError:
+            return room_layout
+
     def _extract_build_year(self, build_date):
         return int(re.search(r'\(([0-9]*)年.*\)', build_date).group(1))
 

@@ -120,6 +120,18 @@ def test_extract_minimum_access_time_to_public_transport(preprocessor):
     assert_series_equal(output, expected)
 
 
+def test_extract_room_layout(preprocessor):
+    input_series = pd.Series([
+        '2LDK (洋6 洋4.5 LDK16.5)',
+        'ワンルーム (洋8.5)',
+        'ワンルーム',
+    ])
+    expected = pd.Series(['2LDK', 'ワンルーム', 'ワンルーム'])
+    output = input_series.apply(preprocessor._extract_room_layout)
+
+    assert_series_equal(output, expected)
+
+
 def test_extract_build_year(preprocessor):
     input_series = pd.Series([
         '築41年(1980年)',
