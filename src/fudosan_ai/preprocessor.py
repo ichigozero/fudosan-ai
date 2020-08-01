@@ -86,10 +86,13 @@ class Preprocessor:
         splitted_series = series.str.split(delimiter, expand=True)
         unique_series = pd.unique(splitted_series.values.ravel('K'))
 
-        for item in sorted(filter(None, unique_series)):
+        for item in filter(None, unique_series):
             column_name = '{}_{}'.format(prefix, item)
             df_output[column_name] = 0
-            df_output.loc[series.str.contains(item), column_name] = 1
+            df_output.loc[
+                series.str.contains(str(item), na=False),
+                column_name
+            ] = 1
 
         # Exclude first column from the output
         return df_output.drop(df_output.columns[[0]], axis=1)

@@ -175,6 +175,8 @@ def test_convert_multi_categorical_variables_to_binaries(preprocessor):
         series=input_series,
         prefix='col'
     )
+    # Sort output data frame column by names for easy comparison
+    output = output.reindex(sorted(output.columns), axis=1)
 
     assert_frame_equal(output, expected)
 
