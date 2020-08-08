@@ -58,6 +58,25 @@ def test_get_index_of_rows_with_no_floor_numbers(preprocessor):
     assert_index_equal(output, expected)
 
 
+def test_get_index_of_rows_with_outliers(preprocessor):
+    input_df = pd.DataFrame({
+        'number': [
+            10.2, 14.1, 14.4,
+            14.4, 14.4, 14.5,
+            14.5, 14.6, 14.7,
+            14.7, 14.7, 14.9,
+            15.1, 15.9, 16.4
+        ]
+    })
+    expected = pd.Int64Index([0, 13, 14])
+    output = preprocessor._get_index_of_rows_with_outliers(
+        input_df,
+        'number'
+    )
+
+    assert_index_equal(output, expected)
+
+
 def test_price_str_to_float(preprocessor):
     input_series = pd.Series([
         '0.72万円',

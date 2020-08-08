@@ -38,6 +38,16 @@ class Preprocessor:
 
         df.update(df['rent_price'].apply(self._convert_price_str_to_float))
         df.update(df['monthly_fee'].apply(self._convert_price_str_to_float))
+
+        df['total_rent_price'] = df['rent_price'] + df['monthly_fee']
+        df.drop(
+            self._get_index_of_rows_with_outliers(
+                df=df,
+                column_name='total_rent_price'
+            ),
+            inplace=True
+        )
+
         df.update(
             df['address'].apply(
                 self._extract_city_of_address,
@@ -55,7 +65,6 @@ class Preprocessor:
         df.update(df['number_of_floors'].apply(self._extract_floor_number))
         df.update(df['has_parking'].apply(self._convert_to_binary))
 
-        df['total_rent_price'] = df['rent_price'] + df['monthly_fee']
         df['room_size'] = pd.to_numeric(
             df['room_size'].str.replace('m2', '')
         )
@@ -127,6 +136,23 @@ class Preprocessor:
         column_name
     ):
         return df[~df[column_name].str.contains('階', na=False)].index
+
+    def _get_index_of_rows_with_outliers(
+        self,
+        df,
+        column_name
+    ):
+        first_quartile = df[column_name].quantile(0.25)
+        third_quartile = df[column_name].quantile(0.75)
+
+        interquartile_range = third_quartile - first_quartile
+        lower_bound = first_quartile - (1.5 * interquartile_range)
+        upper_bound = third_quartile + (1.5 * interquartile_range)
+
+        return df[
+            (df[column_name] < lower_bound) |
+            (df[column_name] > upper_bound)
+        ].index
 
     def _convert_price_str_to_float(self, price):
         if 'なし' in price:
