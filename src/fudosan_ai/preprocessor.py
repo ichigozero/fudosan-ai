@@ -231,7 +231,7 @@ class Preprocessor:
                 column_name
             ] = 1
 
-        # We only need the newly generated columns
+        # We only need the newly generated columns.
         return df_output.drop(df_output.columns[[0]], axis=1)
 
     def _convert_to_binary(self, column_value):

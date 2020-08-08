@@ -13,7 +13,8 @@ def test_clean_data(raw_rent_data, cleaned_rent_data, preprocessor):
     )
     expected = pd.read_csv(cleaned_rent_data)
 
-    # Output and expected data frames have different index values
+    # Function assert_frame_equal cannot be used since output and
+    # expected data frames have different index values.
     assert np.array_equal(output.values, expected.values) is True
 
 
@@ -208,7 +209,7 @@ def test_convert_multi_categorical_variables_to_binaries(preprocessor):
         series=input_series,
         prefix='col'
     )
-    # Sort output data frame column by names for easy comparison
+    # Sort output data frame column by names for easy comparison.
     output = output.reindex(sorted(output.columns), axis=1)
 
     assert_frame_equal(output, expected)
