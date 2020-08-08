@@ -31,8 +31,8 @@ def test_get_index_of_rows_with_no_access_to_public_transports(preprocessor):
     output = (
         preprocessor
         ._get_index_of_rows_with_no_access_to_public_transports(
-            input_df,
-            'access'
+            df=input_df,
+            column_name='access'
         )
     )
 
@@ -51,8 +51,8 @@ def test_get_index_of_rows_with_no_floor_numbers(preprocessor):
     })
     expected = pd.Int64Index([1, 2, 4])
     output = preprocessor._get_index_of_rows_with_no_floor_numbers(
-        input_df,
-        'floor_number'
+        df=input_df,
+        column_name='floor_number'
     )
 
     assert_index_equal(output, expected)
@@ -70,8 +70,8 @@ def test_get_index_of_rows_with_outliers(preprocessor):
     })
     expected = pd.Int64Index([0, 13, 14])
     output = preprocessor._get_index_of_rows_with_outliers(
-        input_df,
-        'number'
+        df=input_df,
+        column_name='number'
     )
 
     assert_index_equal(output, expected)
