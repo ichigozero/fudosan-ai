@@ -3,6 +3,117 @@ import pandas as pd
 
 
 class Preprocessor:
+    def clean_data(
+            self,
+            csv_path,
+            prefecture_name,
+            municipal_types
+    ):
+        df = pd.read_csv(csv_path, na_values=['-', 'ー'])
+
+        df.fillna('', inplace=True)
+        df.dropna(how='all', inplace=True)
+        df.drop_duplicates(inplace=True)
+        df.drop(
+            self._get_index_of_rows_with_no_access_to_public_transports(
+                df=df,
+                column_name='access'
+            ),
+            inplace=True
+        )
+        df.drop(
+            self._get_index_of_rows_with_no_floor_numbers(
+                df=df,
+                column_name='floor_number'
+            ),
+            inplace=True
+        )
+        df.drop(
+            self._get_index_of_rows_with_no_floor_numbers(
+                df=df,
+                column_name='number_of_floors'
+            ),
+            inplace=True
+        )
+
+        df.update(df['rent_price'].apply(self._convert_price_str_to_float))
+        df.update(df['monthly_fee'].apply(self._convert_price_str_to_float))
+        df.update(
+            df['address'].apply(
+                self._extract_city_of_address,
+                args=(prefecture_name, '|'.join(municipal_types),)
+            )
+        )
+        df.update(
+            df['access'].apply(
+                self._extract_minimum_access_time_to_public_transport
+            )
+        )
+        df.update(df['room_layout'].apply(self._extract_room_layout))
+        df.update(df['build_date'].apply(self._extract_build_year))
+        df.update(df['floor_number'].apply(self._extract_floor_number))
+        df.update(df['number_of_floors'].apply(self._extract_floor_number))
+        df.update(df['has_parking'].apply(self._convert_to_binary))
+
+        df['total_rent_price'] = df['rent_price'] + df['monthly_fee']
+        df['room_size'] = pd.to_numeric(
+            df['room_size'].str.replace('m2', '')
+        )
+        df = df.join(
+            self._convert_multi_categorical_variables_to_binaries(
+                series=df['features'],
+                prefix='features'
+            )
+        )
+        df = df.join(
+            self._convert_multi_categorical_variables_to_binaries(
+                series=df['popular_items'],
+                prefix='popular_items'
+            )
+        )
+
+        columns_to_drop = [
+            'rent_price',
+            'monthly_fee',
+            'bond_deposit',
+            'key_money',
+            'security_deposit',
+            'features',
+            'popular_items',
+            'bath_toilet',
+            'kitchen',
+            'storage',
+            'porch',
+            'security',
+            'facility',
+            'room_position',
+            'communication',
+            'rent_condition',
+            'other_facility',
+            'has_deduction',
+            'has_insurance',
+            'contract_period',
+            'available_date',
+            'misc_conditions',
+            'special_note',
+            'discloser',
+            'disclose_date',
+            'update_date',
+            'next_update_date',
+            'url',
+        ]
+        df.drop(columns_to_drop, axis=1, inplace=True)
+
+        return pd.get_dummies(
+            df,
+            columns=[
+                'room_layout',
+                'category',
+                'azimuth',
+                'building_structure'
+            ]
+        )
+
     def _get_index_of_rows_with_no_access_to_public_transports(
             self,
             df,
@@ -31,7 +142,8 @@ class Preprocessor:
             )
 
             # When property price is a price range
-            # take the average of the prices as the new price
+            # take the average of the prices as the new price,
+            # since we do not know what the actual price would be.
             prices = list(map(float, symbolless_price.split('～')))
             averaged_price = sum(prices) / len(prices)
 
@@ -82,7 +194,6 @@ class Preprocessor:
         delimiter='|'
     ):
         df_output = pd.DataFrame(series)
-        df_output.fillna('', inplace=True)
         splitted_series = series.str.split(delimiter, expand=True)
         unique_series = pd.unique(splitted_series.values.ravel('K'))
 
@@ -94,7 +205,7 @@ class Preprocessor:
                 column_name
             ] = 1
 
-        # Exclude first column from the output
+        # We only need the newly generated columns
         return df_output.drop(df_output.columns[[0]], axis=1)
 
     def _convert_to_binary(self, column_value):

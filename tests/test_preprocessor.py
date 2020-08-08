@@ -1,7 +1,20 @@
+import numpy as np
 import pandas as pd
 from pandas._testing import assert_frame_equal
 from pandas._testing import assert_index_equal
 from pandas._testing import assert_series_equal
+
+
+def test_clean_data(raw_rent_data, cleaned_rent_data, preprocessor):
+    output = preprocessor.clean_data(
+        csv_path=raw_rent_data,
+        prefecture_name='千葉県',
+        municipal_types='市｜郡'
+    )
+    expected = pd.read_csv(cleaned_rent_data)
+
+    # Output and expected data frames have different index values
+    assert np.array_equal(output.values, expected.values) is True
 
 
 def test_get_index_of_rows_with_no_access_to_public_transports(preprocessor):
@@ -163,13 +176,14 @@ def test_convert_multi_categorical_variables_to_binaries(preprocessor):
         'a|b|c|c',
         'c|d|',
         'd',
+        '',
         None,
     ])
     expected = pd.DataFrame({
-        'col_a': [1, 0, 0, 0, ],
-        'col_b': [1, 0, 0, 0, ],
-        'col_c': [1, 1, 0, 0, ],
-        'col_d': [0, 1, 1, 0, ],
+        'col_a': [1, 0, 0, 0, 0, ],
+        'col_b': [1, 0, 0, 0, 0, ],
+        'col_c': [1, 1, 0, 0, 0, ],
+        'col_d': [0, 1, 1, 0, 0, ],
     })
     output = preprocessor._convert_multi_categorical_variables_to_binaries(
         series=input_series,
