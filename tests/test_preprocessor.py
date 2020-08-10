@@ -110,7 +110,7 @@ def test_extract_city_of_tokyo_address(preprocessor):
         '港区',
     ])
     output = input_series.apply(
-        preprocessor._extract_city_of_address,
+        preprocessor._extract_city_of_location,
         args=('東京都', '区',)
     )
 
@@ -133,7 +133,7 @@ def test_extract_city_of_chiba_address(preprocessor):
         '印旛郡',
     ])
     output = input_series.apply(
-        preprocessor._extract_city_of_address,
+        preprocessor._extract_city_of_location,
         args=('千葉県', '市|郡',)
     )
 
