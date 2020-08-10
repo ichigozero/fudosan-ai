@@ -116,6 +116,7 @@ class Preprocessor:
         return pd.get_dummies(
             df,
             columns=[
+                'location',
                 'room_layout',
                 'category',
                 'azimuth',
