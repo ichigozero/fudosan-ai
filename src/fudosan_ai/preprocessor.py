@@ -49,8 +49,8 @@ class Preprocessor:
         )
 
         df.update(
-            df['address'].apply(
-                self._extract_city_of_address,
+            df['location'].apply(
+                self._extract_city_of_location,
                 args=(prefecture_name, '|'.join(municipal_types),)
             )
         )
@@ -116,6 +116,7 @@ class Preprocessor:
         return pd.get_dummies(
             df,
             columns=[
+                'location',
                 'room_layout',
                 'category',
                 'azimuth',
@@ -178,7 +179,7 @@ class Preprocessor:
             else:
                 return averaged_price
 
-    def _extract_city_of_address(self, location, prefecture, city_title):
+    def _extract_city_of_location(self, location, prefecture, city_title):
         regex = r'(.*[{}])'.format(city_title)
         city = re.search(regex, location).group(1)
 
