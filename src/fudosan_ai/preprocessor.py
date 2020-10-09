@@ -180,10 +180,15 @@ class Preprocessor:
                 return averaged_price
 
     def _extract_city_of_location(self, location, prefecture, city_title):
-        regex = r'(.*[{}])'.format(city_title)
-        city = re.search(regex, location).group(1)
+        try:
+            regex = r'(.*[{}])'.format(city_title)
+            city = re.search(regex, location).group(1)
 
-        return city.replace(prefecture, '')
+            return city.replace(prefecture, '')
+        except AttributeError:
+            # For debugging
+            print('Input location: {}'.format(location))
+            raise
 
     def _extract_minimum_access_time_to_public_transport(
             self,
