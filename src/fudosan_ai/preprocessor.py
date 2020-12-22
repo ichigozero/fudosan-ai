@@ -68,18 +68,6 @@ class Preprocessor:
         df['room_size'] = pd.to_numeric(
             df['room_size'].str.replace('m2', '')
         )
-        df = df.join(
-            self._convert_multi_categorical_variables_to_binaries(
-                series=df['features'],
-                prefix='features'
-            )
-        )
-        df = df.join(
-            self._convert_multi_categorical_variables_to_binaries(
-                series=df['popular_items'],
-                prefix='popular_items'
-            )
-        )
 
         columns_to_drop = [
             'rent_price',
@@ -87,8 +75,6 @@ class Preprocessor:
             'bond_deposit',
             'key_money',
             'security_deposit',
-            'features',
-            'popular_items',
             'bath_toilet',
             'kitchen',
             'storage',
@@ -112,6 +98,24 @@ class Preprocessor:
             'url',
         ]
         df.drop(columns_to_drop, axis=1, inplace=True)
+
+        return df
+
+    def one_hot_encode(self, cleaned_df):
+        df = cleaned_df.join(
+            self._convert_multi_categorical_variables_to_binaries(
+                series=cleaned_df['features'],
+                prefix='features'
+            )
+        )
+        df = df.join(
+            self._convert_multi_categorical_variables_to_binaries(
+                series=df['popular_items'],
+                prefix='popular_items'
+            )
+        )
+
+        df.drop(['features', 'popular_items'], axis=1, inplace=True)
 
         return pd.get_dummies(
             df,
@@ -226,8 +230,10 @@ class Preprocessor:
         delimiter='|'
     ):
         df_output = pd.DataFrame(series)
-        splitted_series = series.str.split(delimiter, expand=True)
-        unique_series = pd.unique(splitted_series.values.ravel('K'))
+        unique_series = (
+            Preprocessor
+            ._get_multi_categorical_variables_unique_values(series, delimiter)
+        )
 
         for item in filter(None, unique_series):
             column_name = '{}_{}'.format(prefix, item)
@@ -239,6 +245,15 @@ class Preprocessor:
 
         # We only need the newly generated columns.
         return df_output.drop(df_output.columns[[0]], axis=1)
+
+    @staticmethod
+    def _get_multi_categorical_variables_unique_values(
+        series,
+        delimiter='|'
+    ):
+        splitted_series = series.str.split(delimiter, expand=True)
+
+        return pd.unique(splitted_series.values.ravel('K'))
 
     def _convert_to_binary(self, column_value):
         if 'あり' in column_value:

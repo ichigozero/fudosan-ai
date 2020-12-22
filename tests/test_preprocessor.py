@@ -5,13 +5,34 @@ from pandas._testing import assert_index_equal
 from pandas._testing import assert_series_equal
 
 
-def test_clean_data(raw_rent_data, cleaned_rent_data, preprocessor):
+def test_clean_data(
+        raw_rent_data,
+        cleaned_rent_data,
+        preprocessor
+):
     output = preprocessor.clean_data(
         csv_path=raw_rent_data,
         prefecture_name='千葉県',
         municipal_types='市｜郡'
     )
     expected = pd.read_csv(cleaned_rent_data)
+    expected.fillna('', inplace=True)
+
+    # Function assert_frame_equal cannot be used since output and
+    # expected data frames have different index values.
+    assert np.array_equal(output.values, expected.values) is True
+
+
+def test_one_hot_encode(
+        cleaned_rent_data,
+        one_hot_encoded_rent_data,
+        preprocessor
+):
+    cleaned_df = pd.read_csv(cleaned_rent_data)
+    cleaned_df.fillna('', inplace=True)
+
+    output = preprocessor.one_hot_encode(cleaned_df)
+    expected = pd.read_csv(one_hot_encoded_rent_data)
 
     # Function assert_frame_equal cannot be used since output and
     # expected data frames have different index values.
