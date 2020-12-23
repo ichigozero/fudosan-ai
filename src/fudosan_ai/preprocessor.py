@@ -62,7 +62,7 @@ class Preprocessor:
         df.update(df['room_layout'].apply(self._extract_room_layout))
         df.update(df['build_date'].apply(self._extract_build_year))
         df.update(df['floor_number'].apply(self._extract_floor_number))
-        df.update(df['number_of_floors'].apply(self._extract_floor_number))
+        df.update(df['number_of_floors'].apply(self._extract_number_of_floors))
         df.update(df['has_parking'].apply(self._convert_to_binary))
 
         df['room_size'] = pd.to_numeric(
@@ -222,6 +222,17 @@ class Preprocessor:
             return -floor_number
         else:
             return floor_number
+
+    def _extract_number_of_floors(self, floor):
+        matches = re.search(r'([0-9]+)階(?:.*([0-9]+)階付き)?', floor)
+        total_floor = int(matches.group(1))
+
+        try:
+            total_floor += int(matches.group(2))
+        except TypeError:
+            pass
+
+        return total_floor
 
     def _convert_multi_categorical_variables_to_binaries(
         self,
