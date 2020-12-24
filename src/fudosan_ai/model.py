@@ -11,9 +11,13 @@ class Model():
         self._y_train = None
         self._y_test = None
 
-    def train(self, cleaned_df, y_column_name='total_rent_price'):
-        X = cleaned_df.drop(y_column_name, axis=1)
-        y = cleaned_df[y_column_name]
+    def train(
+            self,
+            one_hot_encoded_df,
+            y_column_name='total_rent_price'
+        ):
+        X = one_hot_encoded_df.drop(y_column_name, axis=1)
+        y = one_hot_encoded_df[y_column_name]
 
         self._X_train, self._X_test, self._y_train, self._y_test = (
             train_test_split(

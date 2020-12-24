@@ -62,23 +62,11 @@ class Preprocessor:
         df.update(df['room_layout'].apply(self._extract_room_layout))
         df.update(df['build_date'].apply(self._extract_build_year))
         df.update(df['floor_number'].apply(self._extract_floor_number))
-        df.update(df['number_of_floors'].apply(self._extract_floor_number))
+        df.update(df['number_of_floors'].apply(self._extract_number_of_floors))
         df.update(df['has_parking'].apply(self._convert_to_binary))
 
         df['room_size'] = pd.to_numeric(
             df['room_size'].str.replace('m2', '')
-        )
-        df = df.join(
-            self._convert_multi_categorical_variables_to_binaries(
-                series=df['features'],
-                prefix='features'
-            )
-        )
-        df = df.join(
-            self._convert_multi_categorical_variables_to_binaries(
-                series=df['popular_items'],
-                prefix='popular_items'
-            )
         )
 
         columns_to_drop = [
@@ -87,8 +75,6 @@ class Preprocessor:
             'bond_deposit',
             'key_money',
             'security_deposit',
-            'features',
-            'popular_items',
             'bath_toilet',
             'kitchen',
             'storage',
@@ -112,6 +98,24 @@ class Preprocessor:
             'url',
         ]
         df.drop(columns_to_drop, axis=1, inplace=True)
+
+        return df
+
+    def one_hot_encode(self, cleaned_df):
+        df = cleaned_df.join(
+            self._convert_multi_categorical_variables_to_binaries(
+                series=cleaned_df['features'],
+                prefix='features'
+            )
+        )
+        df = df.join(
+            self._convert_multi_categorical_variables_to_binaries(
+                series=df['popular_items'],
+                prefix='popular_items'
+            )
+        )
+
+        df.drop(['features', 'popular_items'], axis=1, inplace=True)
 
         return pd.get_dummies(
             df,
@@ -218,6 +222,17 @@ class Preprocessor:
             return -floor_number
         else:
             return floor_number
+
+    def _extract_number_of_floors(self, floor):
+        matches = re.search(r'([0-9]+)階(?:.*([0-9]+)階付き)?', floor)
+        total_floor = int(matches.group(1))
+
+        try:
+            total_floor += int(matches.group(2))
+        except TypeError:
+            pass
+
+        return total_floor
 
     def _convert_multi_categorical_variables_to_binaries(
         self,

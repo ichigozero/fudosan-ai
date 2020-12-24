@@ -23,6 +23,16 @@ def cleaned_rent_data():
     return os.path.join(test_file_folder('cleaned_rent_data.csv'))
 
 
+@pytest.fixture(scope='module')
+def one_hot_encoded_rent_data():
+    return os.path.join(test_file_folder('one_hot_encoded_rent_data.csv'))
+
+
+@pytest.fixture(scope='module')
+def form_elements():
+    return os.path.join(test_file_folder('form_elements.json'))
+
+
 @pytest.fixture
 def preprocessor():
     return Preprocessor()
