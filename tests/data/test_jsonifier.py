@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from fudosan_ai import Jsonifier
+from app.data.jsonifier import Jsonifier
 
 def test_to_json(cleaned_rent_data, form_elements):
     cleaned_df = pd.read_csv(cleaned_rent_data)

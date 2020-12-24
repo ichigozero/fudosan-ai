@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from fudosan_ai import Preprocessor
+from app.data.preprocessor import Preprocessor
 
 
 def test_file_folder(filename):
