@@ -241,10 +241,8 @@ class Preprocessor:
         delimiter='|'
     ):
         df_output = pd.DataFrame(series)
-        unique_series = (
-            Preprocessor
-            ._get_multi_categorical_variables_unique_values(series, delimiter)
-        )
+        splitted_series = series.str.split(delimiter, expand=True)
+        unique_series = pd.unique(splitted_series.values.ravel('K'))
 
         for item in filter(None, unique_series):
             column_name = '{}_{}'.format(prefix, item)
@@ -256,15 +254,6 @@ class Preprocessor:
 
         # We only need the newly generated columns.
         return df_output.drop(df_output.columns[[0]], axis=1)
-
-    @staticmethod
-    def _get_multi_categorical_variables_unique_values(
-        series,
-        delimiter='|'
-    ):
-        splitted_series = series.str.split(delimiter, expand=True)
-
-        return pd.unique(splitted_series.values.ravel('K'))
 
     def _convert_to_binary(self, column_value):
         if 'あり' in column_value:

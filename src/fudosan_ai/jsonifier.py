@@ -1,6 +1,6 @@
 import json
 
-from .preprocessor import Preprocessor
+import pandas as pd
 
 class Jsonifier:
     @staticmethod
@@ -23,26 +23,26 @@ class Jsonifier:
                 round(cleaned_df[column_name].max(), -1)
             ]
 
-        def _get_multi_categorical_variables_unique_list(column_name):
-            output = (
-                Preprocessor
-                ._get_multi_categorical_variables_unique_values(
-                    series=cleaned_df[column_name])
-                .tolist()
-            )
+        def _get_multi_categorical_variables_unique_list(
+                column_name,
+                delimiter='|'
+            ):
+            series = cleaned_df[column_name]
+            splitted_series = series.str.split(delimiter, expand=True)
+            output = pd.unique(splitted_series.values.ravel('K')).tolist()
             output = list(filter(None, output))
             output.sort()
 
             return output
 
+        features = _get_multi_categorical_variables_unique_list('features')
+        popular_items = (
+            _get_multi_categorical_variables_unique_list('popular_items'))
+
         return {
             'checkbox': {
-                'features': (
-                    _get_multi_categorical_variables_unique_list('features')
-                ),
-                'popular_items': (
-                    _get_multi_categorical_variables_unique_list('popular_items')
-                )
+                'features': features,
+                'popular_items': popular_items
             },
             'dropdown_range': {
                 'access': _get_min_max_value('access'),
