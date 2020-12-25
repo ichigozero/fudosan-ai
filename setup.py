@@ -13,6 +13,7 @@ setup(
         "numpy==1.19.1,",
         "pandas==1.0.5,",
         "python-dateutil==2.8.1,",
+        "pymongo==3.11.2",
         "scikit-learn==0.23.2,",
     ],
 )
