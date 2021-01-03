@@ -30,8 +30,8 @@ def analyze_rent_data(
     documents = mongo.db.models.find({'csv_checksum': csv_md5})
 
     if documents.count() > 0:
-        print('{} has been analyzed before'.format(csv_path))
-        print('Aborting...')
+        click.echo('{} has been analyzed before'.format(csv_path))
+        click.echo('Aborting...')
         sys.exit()
 
     save_dir_path = os.path.join(bp.static_folder, prefecture_name)
@@ -46,6 +46,7 @@ def analyze_rent_data(
     preprocessor = Preprocessor()
     model = Model()
 
+    click.echo('Cleaning CSV data')
     cleaned_df = preprocessor.clean_data(
         csv_path,
         prefecture_name,
@@ -53,7 +54,10 @@ def analyze_rent_data(
     )
     one_hot_encoded_df = preprocessor.one_hot_encode(cleaned_df)
 
+    click.echo('Training model of cleaned CSV data')
     model.train(one_hot_encoded_df)
+
+    click.echo('Saving trained model to {}'.format(pickle_path))
     model.to_pickle(pickle_path)
 
     form_elements = Jsonifier.to_json(cleaned_df)
@@ -82,10 +86,13 @@ def analyze_rent_data(
         'active': set_as_active
     }
 
+    click.echo('Saving analyzed data to DB')
     mongo.db.models.insert(document)
 
 
 def md5(filename):
+    click.echo('Calculating cheksum of {}'.format(filename))
+
     hash_md5 = hashlib.md5()
     with open(filename, 'rb') as f:
         for chunk in iter(lambda: f.read(4096), b''):
