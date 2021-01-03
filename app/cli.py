@@ -18,7 +18,7 @@ bp = Blueprint('cli', __name__, static_folder='static')
 @bp.cli.command()
 @click.argument('csv_path')
 @click.argument('prefecture_name')
-@click.argument('municipal_types, nargs=-1')
+@click.option('municipal_types', '-m', multiple=True, default=['区', '市', '郡'])
 @click.option('--set-as-active', '-s', is_flag=True)
 def analyze_rent_data(
         csv_path,
@@ -27,7 +27,7 @@ def analyze_rent_data(
         set_as_active
 ):
     csv_md5 = md5(csv_path)
-    documents = mongo.db.models.find({'csv_checksum', csv_md5})
+    documents = mongo.db.models.find({'csv_checksum': csv_md5})
 
     if documents.count() > 0:
         print('{} has been analyzed before'.format(csv_path))
