@@ -53,11 +53,11 @@ def app_mongodb(app):
                 'radiobutton' : {'has_parking' : [0, 1]}
             },
             'model' : {
-                'pickle_path' : '/static/東京部/東京部_20210104_090939.pkl',
+                'pickle_path' : '東京部_20210104_090939.pkl',
                 'checksum' : 'e7708d20df5a1fcdc243466b6b2213b1',
                 'mean_abs_error' : {
-                    'training' : '755.0167',
-                    'test' : '5583.1486'
+                    'training' : 755.0167,
+                    'test' : 5583.1486
                 }
             },
             'active' : True
