@@ -31,7 +31,6 @@ class Jsonifier:
             splitted_series = series.str.split(delimiter, expand=True)
             output = pd.unique(splitted_series.values.ravel('K')).tolist()
             output = list(filter(None, output))
-            output.sort()
 
             return output
 
