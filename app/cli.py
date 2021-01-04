@@ -66,6 +66,8 @@ def analyze_rent_data(
     pickle_md5 = md5(pickle_path)
 
     if set_as_active:
+        # Only one trained model given
+        # prefecture name can be used at one time
         mongo.db.models.update_many(
             filter={'prefecture': prefecture_name},
             update={'$set': {'active': False}}
