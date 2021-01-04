@@ -1,3 +1,4 @@
+from bson.objectid import ObjectId
 from flask import abort
 
 from app import mongo
@@ -21,3 +22,16 @@ def get_prefectures():
         abort(404)
 
     return {'prefectures': prefectures}
+
+
+@bp.route('/v1.0/form/<string:model_id>', methods=['GET'])
+def get_form_elements(model_id):
+    document = mongo.db.models.find_one({
+        '_id': ObjectId(model_id),
+        'active': True
+    })
+
+    if not document:
+        abort(404)
+
+    return {'form': document['form_elements']}
