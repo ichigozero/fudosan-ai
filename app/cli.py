@@ -39,7 +39,7 @@ def analyze_rent_data(
 
     pickle_name = '{}_{}.pkl'.format(
         prefecture_name,
-        datetime.datetime.today().strftime('%Y%Ym%d%_H%M%S')
+        datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
     )
     pickle_path = os.path.join(save_dir_path, pickle_name)
 
