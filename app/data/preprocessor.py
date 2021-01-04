@@ -7,7 +7,7 @@ class Preprocessor:
             self,
             csv_path,
             prefecture_name,
-            municipal_types
+            municipal_types=['区', '市', '郡']
     ):
         df = pd.read_csv(csv_path, na_values=['-', 'ー'])
 

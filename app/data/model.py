@@ -1,3 +1,5 @@
+import pickle
+
 from sklearn import ensemble
 from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
@@ -39,6 +41,10 @@ class Model():
         )
 
         self._model.fit(self._X_train, self._y_train)
+
+    def to_pickle(self, pickle_path):
+        with open(pickle_path, 'wb') as f:
+            pickle.dump(self._model, f)
 
     def get_training_set_mean_absolute_error(self):
         return '%.4f' % mean_absolute_error(

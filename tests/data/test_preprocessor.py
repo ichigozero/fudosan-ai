@@ -13,7 +13,7 @@ def test_clean_data(
     output = preprocessor.clean_data(
         csv_path=raw_rent_data,
         prefecture_name='千葉県',
-        municipal_types='市｜郡'
+        municipal_types=['市', '郡']
     )
     expected = pd.read_csv(cleaned_rent_data)
     expected.fillna('', inplace=True)
