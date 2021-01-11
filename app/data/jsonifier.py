@@ -57,7 +57,7 @@ class Jsonifier:
                 'azimuth': _get_unique_list('azimuth'),
                 'building_structure': _get_unique_list('building_structure')
             },
-            'radiobutton': {
+            'radio_button': {
                 'has_parking': _get_unique_list('has_parking')
             }
         }

@@ -29,7 +29,7 @@
     "azimuth": ["", "南", "西"],
     "building_structure": ["軽量鉄骨", "鉄筋コンクリート", "鉄骨"]
   },
-  "radiobutton": {
+  "radio_button": {
     "has_parking": [0, 1]
   }
 }
