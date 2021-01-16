@@ -37,7 +37,7 @@ def predict_rent_price(model_id):
 
     return {
         'result': {
-            'price': rent_prices[0],
+            'price': round(rent_prices[0], 4),
             'mean_error': mean_error
         }
     }

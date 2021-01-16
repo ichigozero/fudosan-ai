@@ -47,13 +47,17 @@ class Model():
             pickle.dump(self._model, f)
 
     def get_training_set_mean_absolute_error(self):
-        return '%.4f' % mean_absolute_error(
+        mean_error = mean_absolute_error(
             self._y_train,
             self._model.predict(self._X_train)
         )
 
+        return round(mean_error, 4)
+
     def get_test_set_mean_absolute_error(self):
-        return '%.4f' % mean_absolute_error(
+        mean_error = mean_absolute_error(
             self._y_test,
             self._model.predict(self._X_test)
         )
+
+        return round(mean_error, 4)
