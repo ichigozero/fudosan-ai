@@ -65,6 +65,8 @@ def analyze_rent_data(
     test_mean_abs_error = model.get_test_set_mean_absolute_error()
     pickle_md5 = md5(pickle_path)
 
+    is_set_to_active = set_as_active
+
     if set_as_active:
         # Only one trained model given
         # prefecture name can be used at one time
@@ -72,6 +74,16 @@ def analyze_rent_data(
             filter={'prefecture': prefecture_name},
             update={'$set': {'active': False}}
         )
+    else:
+        # Make sure that there will always be
+        # one active trained model given prefecture name
+        active_documents = mongo.db.models.find({
+            'prefecture': prefecture_name,
+            'active': True
+        })
+
+        if active_documents.count() == 0:
+            is_set_to_active = True
 
     document = {
         'csv_checksum': csv_md5,
@@ -85,7 +97,7 @@ def analyze_rent_data(
                 'test': test_mean_abs_error
             }
         },
-        'active': set_as_active
+        'active': is_set_to_active
     }
 
     click.echo('Saving analyzed data to DB')
