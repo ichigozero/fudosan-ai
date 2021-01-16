@@ -11,7 +11,16 @@ def create_app(class_config=Config):
 
     mongo.init_app(app)
 
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
+
     from app.cli import bp as cli_bp
     app.register_blueprint(cli_bp)
 
+    app.register_error_handler(404, not_found)
+
     return app
+
+
+def not_found(error):
+    return {'error': 'Not found'}, 404

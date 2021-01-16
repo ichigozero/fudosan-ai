@@ -225,14 +225,7 @@ class Preprocessor:
 
     def _extract_number_of_floors(self, floor):
         matches = re.search(r'([0-9]+)階(?:.*([0-9]+)階付き)?', floor)
-        total_floor = int(matches.group(1))
-
-        try:
-            total_floor += int(matches.group(2))
-        except TypeError:
-            pass
-
-        return total_floor
+        return int(matches.group(1))
 
     def _convert_multi_categorical_variables_to_binaries(
         self,

@@ -1,24 +1,24 @@
 {
   "checkbox": {
     "features": [
-      "フリーレント",
       "二人入居可",
-      "保証人不要",
+      "最上階",
       "外観タイル",
       "日当たり良好",
-      "最上階"
+      "フリーレント",
+      "保証人不要"
     ],
     "popular_items": [
+      "バス・トイレ独立",
       "2階以上",
       "エアコン",
-      "バス・トイレ独立",
       "洗面台"
     ]
   },
   "dropdown_range": {
     "access": [1, 19],
     "build_date": [1994, 2003],
-    "room_size": [20.0, 60.0],
+    "room_size": [5.0, 60.0],
     "floor_number": [1, 2],
     "number_of_floors": [2, 10]
   },
@@ -29,7 +29,7 @@
     "azimuth": ["", "南", "西"],
     "building_structure": ["軽量鉄骨", "鉄筋コンクリート", "鉄骨"]
   },
-  "radiobutton": {
+  "radio_button": {
     "has_parking": [0, 1]
   }
 }
