@@ -18,7 +18,7 @@
   "dropdown_range": {
     "access": [1, 19],
     "build_date": [1994, 2003],
-    "room_size": [20.0, 60.0],
+    "room_size": [5.0, 60.0],
     "floor_number": [1, 2],
     "number_of_floors": [2, 10]
   },

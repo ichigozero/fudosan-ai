@@ -18,10 +18,10 @@ class Jsonifier:
             ]
 
         def _get_rounded_min_max_value(column_name):
-            return [
-                round(cleaned_df[column_name].min(), -1),
-                round(cleaned_df[column_name].max(), -1)
-            ]
+            rounded_min = round(cleaned_df[column_name].min(), -1)
+            rounded_max = round(cleaned_df[column_name].max(), -1)
+
+            return [rounded_min or 5, rounded_max]
 
         def _get_multi_categorical_variables_unique_list(
                 column_name,
