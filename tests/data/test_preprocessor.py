@@ -217,7 +217,7 @@ def test_extract_number_of_floors(preprocessor):
         '地上10階建て',
         '地上10階建て（地下1階付き）',
     ])
-    expected = pd.Series([10, 11])
+    expected = pd.Series([10, 10])
     output = input_series.apply(preprocessor._extract_number_of_floors)
 
     assert_series_equal(output, expected)
