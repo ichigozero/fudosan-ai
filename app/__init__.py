@@ -12,7 +12,7 @@ def create_app(class_config=Config):
     mongo.init_app(app)
 
     from app.api import bp as api_bp
-    app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(api_bp, url_prefix='/fudosan-ai/api')
 
     from app.cli import bp as cli_bp
     app.register_blueprint(cli_bp)
